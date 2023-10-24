@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hguxgkx.answer_backend.mapper.TextQuestionMapper">
+    <!--    插入新的题目-->
+    <insert id="addQuestion" parameterType="com.hguxgkx.answer_backend.pojo.TextQuestion">
+        insert into `text_question`
+            (`author_id`,`stem`,`answer`,`score`)
+        values (#{authorId},#{stem},#{answer},#{score});
+    </insert>
+
+    <!--    伪删除,本质是改变is_delete字段的值-->
+    <update id="deleteQuestion" parameterType="int">
+        update `text_question` set `is_delete`=1 where id=#{id};
+    </update>
+
+    <!--    根据id查询-->
+    <select id="getQuestionById" parameterType="int" resultType="com.hguxgkx.answer_backend.pojo.TextQuestion">
+        select * from `text_question` where id=#{id};
+    </select>
+
+    <!--    根据作者id查询-->
+    <select id="getQuestionByAuthorId" parameterType="string" resultType="com.hguxgkx.answer_backend.pojo.TextQuestion">
+        select * from `text_question` where author_id=#{id};
+    </select>
+
+    <!--    获取最大的id-->
+    <select id="getMaxId" resultType="int">
+        select max(id) from `text_question`;
+    </select>
+</mapper>

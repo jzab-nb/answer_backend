@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hguxgkx.answer_backend.mapper.UserMapper">
+
+<!--    插入用户-->
+    <insert id="addUser" parameterType="com.hguxgkx.answer_backend.pojo.User">
+        insert into `user` values (#{id},#{name},#{role},#{exams},#{classes});
+    </insert>
+
+<!--    更新用户的考试列表-->
+    <update id="updateExamList" parameterType="map">
+        update `user` set exams=#{exams} where id=#{id};
+    </update>
+
+<!--    根据id获取用户-->
+    <select id="getUserById" parameterType="String" resultType="com.hguxgkx.answer_backend.pojo.User">
+        select * from `user` where id=#{id};
+    </select>
+
+<!--    获取最大的id-->
+    <select id="getMaxId" resultType="string">
+        select max(id) from `user`;
+    </select>
+
+<!--    通过角色查询用户-->
+    <select id="getUserByRoles" parameterType="int" resultType="com.hguxgkx.answer_backend.pojo.User">
+        select * from `user` where `role`=#{role};
+    </select>
+
+<!--    只获取用户的考试列表-->
+    <select id="getExamList" parameterType="String" resultType="map">
+        select exams from `user` where id=#{id};
+    </select>
+</mapper>

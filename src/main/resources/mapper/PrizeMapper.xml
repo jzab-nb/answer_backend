@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hguxgkx.answer_backend.mapper.PrizeMapper">
+    <insert id="addPrize" parameterType="com.hguxgkx.answer_backend.pojo.Prize">
+        insert into `prize` values (#{id}, #{stu}, #{prz}, #{totalPrz}, #{log});
+    </insert>
+
+    <update id="updatePrize" parameterType="com.hguxgkx.answer_backend.pojo.Prize">
+        update `prize` set `stu`=#{stu},`total_prz`=#{totalPrz}, `log`=#{log} where id=#{id};
+    </update>
+
+    <select id="getPrizeById" parameterType="int" resultType="com.hguxgkx.answer_backend.pojo.Prize">
+        select * from `prize` where id=#{id};
+    </select>
+
+    <select id="getAllPrize" resultType="com.hguxgkx.answer_backend.pojo.Prize">
+        select * from `prize`;
+    </select>
+</mapper>

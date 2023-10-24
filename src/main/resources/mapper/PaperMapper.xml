@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hguxgkx.answer_backend.mapper.PaperMapper">
+<!--    插入一条新的试卷-->
+    <insert id="addPaper" parameterType="com.hguxgkx.answer_backend.pojo.Paper">
+        insert into `paper`
+        (`author_id`,`questions_list`,`open_time`,`end_time`,`random`,`face`,`custom_score`,`publish`,`question_number`,`paper_name`)
+        values
+        (#{authorId},#{questionsList},#{openTime},#{endTime},#{random},#{face},#{customScore},#{publish},#{questionNumber},#{paperName});
+    </insert>
+
+<!--    伪删除-->
+    <update id="deletePaper" parameterType="int">
+        update `paper` set `is_delete`=1 where id=#{id};
+    </update>
+
+<!--    改变题目列表-->
+    <update id="changeQuestionsList" parameterType="map">
+        update `paper` set `questions_list`=#{questionsList} where id=#{id};
+    </update>
+
+<!--    改变分数列表-->
+    <update id="changeCustomScore" parameterType="map">
+        update `paper` set `custom_score`=#{customScore} where id=#{id};
+    </update>
+
+<!--    发布试卷-->
+    <update id="publishPaper" parameterType="map">
+        update `paper` set `publish`=1,`paper_name`=#{paper_name},`random`=#{random},`face`=#{face} where id=#{id};
+    </update>
+
+<!--    改变开始时间-->
+    <update id="changeOpenTime" parameterType="map">
+        update `paper` set `open_time`=#{openTime} where id=#{id};
+    </update>
+
+<!--    改变结束时间-->
+    <update id="changeEndTime" parameterType="map">
+        update `paper` set `end_time`=#{endTime} where id=#{id};
+    </update>
+
+<!--    改变随机度-->
+    <update id="changeRandom" parameterType="map">
+        update `paper` set `random`=#{random} where id=#{id};
+    </update>
+
+    <update id="endExam" parameterType="int">
+        update `paper` set publish=2 where id=#{id};
+    </update>
+
+<!--    查询试卷通过id-->
+    <select id="getPaperById" parameterType="int" resultType="com.hguxgkx.answer_backend.pojo.Paper">
+        select * from `paper` where id=#{id};
+    </select>
+
+<!--    查询试卷通过作者id(假删除的无法查出)-->
+    <select id="getPaperByAuthorId" parameterType="string" resultType="map">
+        select id,paper_name,publish,random from `paper` where author_id=#{id} and is_delete=0;
+    </select>
+
+<!--    根据面向的群体获取试卷-->
+    <select id="getPaperByFace" resultType="com.hguxgkx.answer_backend.pojo.Paper">
+        select * from `paper` where face=#{face} and is_delete=0 and publish=1;
+    </select>
+
+<!--        获取最大的id-->
+    <select id="getMaxId" resultType="int">
+        select max(id) from `paper`;
+    </select>
+</mapper>

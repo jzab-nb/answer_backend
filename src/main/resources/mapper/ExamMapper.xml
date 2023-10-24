@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hguxgkx.answer_backend.mapper.ExamMapper">
+<!--    插入一条新的考试-->
+    <insert id="addExam" parameterType="com.hguxgkx.answer_backend.pojo.Exam">
+        insert into `exam` (`student_id`,`paper_id`,`questions_list`,`custom_score`) values
+        (#{studentId},#{paperId},#{questionsList},#{customScore});
+    </insert>
+<!--    根据id删除考试-->
+    <delete id="deleteExam" parameterType="int">
+        delete from `exam` where id=#{id};
+    </delete>
+
+<!--    根据试卷id删除考试-->
+    <delete id="deleteExamByPaperId" parameterType="int">
+        delete from `exam` where paper_id=#{id};
+    </delete>
+
+<!--    上传答案-->
+    <update id="uploadAnswers" parameterType="map">
+        update `exam` set answers_list=#{answersList} where id=#{id};
+    </update>
+
+<!--    是否考完-->
+    <update id="changeEndExam" parameterType="map">
+        update `exam` set end_exam=#{endExam} where id=#{id};
+    </update>
+
+<!--    是否判完卷-->
+    <update id="changeEndJudge" parameterType="map">
+        update `exam` set end_judge=#{endJudge} where id=#{id};
+    </update>
+
+<!--    改变分数-->
+    <update id="changeScore" parameterType="map">
+        update `exam` set score=#{score} where id=#{id};
+    </update>
+
+<!--    改变正确/错误列表-->
+    <update id="changeTrueFalseList" parameterType="map">
+        update `exam` set true_false_list=#{trueFalseList} where id=#{id};
+    </update>
+
+<!--    根据id获取考试-->
+    <select id="getExamById" parameterType="int" resultType="com.hguxgkx.answer_backend.pojo.Exam">
+        select * from `exam` where id=#{id};
+    </select>
+
+<!--    根据试卷id获取考试-->
+    <select id="getExamByPaperId" parameterType="int" resultType="map">
+        select `student_id`,`score`,`end_exam`,`id` from `exam` where paper_id=#{id};
+    </select>
+
+<!--    联表查询,从exam表中获取是否完成考试判卷,从paper表中获取开始结束时间-->
+    <select id="getExamByStudentId" parameterType="string" resultType="map">
+        select e.id,e.end_exam,e.end_judge,e.score,p.open_time,p.end_time,p.paper_name,p.question_number
+        from `exam` as e
+        inner join `paper` as p
+        where e.student_id=#{id} and p.id=e.paper_id and p.publish=1;
+    </select>
+
+<!--    查询完成某个试卷的人数-->
+    <select id="countEndExam" resultType="int" parameterType="int">
+        select count(1) as `end_exam` from `exam` where paper_id=#{id} and end_exam=1;
+    </select>
+<!--    查询总人数-->
+    <select id="countAll" resultType="int" parameterType="int">
+        select count(1) as `end_exam` from `exam` where paper_id=#{id};
+    </select>
+</mapper>
